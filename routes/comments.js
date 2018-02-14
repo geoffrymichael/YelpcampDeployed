@@ -9,8 +9,9 @@ var middleware = require("../middleware")
 //Comments New
 router.get("/new", middleware.isLoggedIn, function(req, res) {
    Campground.findById(req.params.id, function(err, campground) {
-       if (err){
-           console.log(err);
+       if (err || !campground){
+            req.flash("error", "Campground not found");
+            res.redirect("/campgrounds");
        } else {
           res.render("comments/new", {campground: campground});
        }
@@ -24,8 +25,8 @@ router.post("/", middleware.isLoggedIn, function(req, res) {
     //  Campground.findById(req.params.id).populate("comments").exec(function(err, campground) {
     //This is Colt's line and produced a handling error. Update: it works now.
     Campground.findById(req.params.id, function(err, campground) { 
-        if(err){
-            console.log(err);
+        if(err || !campground){
+            req.flash("error", "Campground not found");
             res.redirect("/campgrounds");
         } else {
             
