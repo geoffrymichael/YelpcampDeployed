@@ -26,8 +26,12 @@ router.post("/", middleware.isLoggedIn, function(req, res) {
     var author = {
       id: req.user._id,
       username: req.user.username
-    };
+    }
     geocoder.geocode(req.body.location, function (err, data) {
+        if(err || data.status != "OK") {
+            req.flash("error", "Address not found");
+            return res.redirect("back");
+        }
     var lat = data.results[0].geometry.location.lat;
     var lng = data.results[0].geometry.location.lng;
     var location = data.results[0].formatted_address;
@@ -40,8 +44,6 @@ router.post("/", middleware.isLoggedIn, function(req, res) {
                 //redirect back to campgrounds page after adding a new one
                 res.redirect("/campgrounds");    
             }
-    
-        
         });    
     });
 });
@@ -76,6 +78,10 @@ router.get("/:id", function(req, res){
 // UPDATE Route 
  router.put("/:id", middleware.checkCampgroundOwnership, function(req, res){
     geocoder.geocode(req.body.location, function (err, data) {
+        if(err || data.status != "OK") {
+            req.flash("error", "Address not found");
+            return res.redirect("back");
+        }
     var lat = data.results[0].geometry.location.lat;
     var lng = data.results[0].geometry.location.lng;
     var location = data.results[0].formatted_address;
