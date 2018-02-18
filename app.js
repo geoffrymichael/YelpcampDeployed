@@ -25,6 +25,9 @@ app.use(flash());
 
 //seedDB(); //Seed the database.
 
+//share moment js across app
+app.locals.moment = require("moment");
+
 //PASSPORT Config.
 
 app.use(require("express-session")({
