@@ -21,6 +21,7 @@ router.get("/", function(req, res) {
 //CREATE - adds a new campground
 router.post("/", middleware.isLoggedIn, function(req, res) {
     var name = req.body.name;
+    var price = req.body.price;
     var image = req.body.image;
     var desc = req.body.description;
     var author = {
@@ -35,7 +36,7 @@ router.post("/", middleware.isLoggedIn, function(req, res) {
     var lat = data.results[0].geometry.location.lat;
     var lng = data.results[0].geometry.location.lng;
     var location = data.results[0].formatted_address;
-    var newCampground = {name: name, image: image, description: desc, author:author, location: location, lat: lat, lng: lng};
+    var newCampground = {name: name, price: price, image: image, description: desc, author:author, location: location, lat: lat, lng: lng};
     //mongoose way of creating a new campground and adding it to database
         Campground.create(newCampground, function(err, newlyCreated) {
             if(err){
@@ -86,7 +87,7 @@ router.get("/:id", function(req, res){
     var lat = data.results[0].geometry.location.lat;
     var lng = data.results[0].geometry.location.lng;
     var location = data.results[0].formatted_address;
-    var newData = {name: req.body.name, image: req.body.image, description: req.body.description,  location: location, lat: lat, lng: lng};
+    var newData = {name: req.body.name, price: req.body.price, image: req.body.image, description: req.body.description,  location: location, lat: lat, lng: lng};
          Campground.findByIdAndUpdate(req.params.id, {$set: newData}, function(err, updatedCampground) {
             if(err){
                 res.redirect("/campgrounds")
